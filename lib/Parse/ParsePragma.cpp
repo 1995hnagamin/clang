@@ -20,6 +20,7 @@
 #include "clang/Sema/LoopHint.h"
 #include "clang/Sema/Scope.h"
 #include "llvm/ADT/StringSwitch.h"
+#include <sstream>
 using namespace clang;
 
 namespace {
@@ -93,6 +94,12 @@ struct PragmaNoOpenMPHandler : public PragmaHandler {
 
 struct PragmaOpenMPHandler : public PragmaHandler {
   PragmaOpenMPHandler() : PragmaHandler("omp") { }
+  void HandlePragma(Preprocessor &PP, PragmaIntroducerKind Introducer,
+                    Token &FirstToken) override;
+};
+
+struct PragmaDeadHandler : public PragmaHandler {
+  PragmaDeadHandler(): PragmaHandler("dead") { }
   void HandlePragma(Preprocessor &PP, PragmaIntroducerKind Introducer,
                     Token &FirstToken) override;
 };
@@ -1510,6 +1517,27 @@ PragmaOpenMPHandler::HandlePragma(Preprocessor &PP,
   std::copy(Pragma.begin(), Pragma.end(), Toks);
   PP.EnterTokenStream(Toks, Pragma.size(),
                       /*DisableMacroExpansion=*/false, /*OwnsTokens=*/true);
+}
+
+void
+PragmaDeadHandler::HandlePragma(Preprocessor &PP,
+                                PragmaIntroducerKind Introducer,
+                                Token &FirstTok) {
+  Token Tok;
+  std::stringstream DeadDirective;
+  while (Tok.isNot(tok::eod)) {
+    PP.Lex(Tok);
+    if (Tok.isNot(tok::eod)) {
+      DeadDirective << PP.getSpelling(Tok);
+    }
+  }
+
+  Tok.startToken();
+  Tok.setKind(tok::annot_pragma_dead);
+  Tok.setLocation(FirstTok.getLocation());
+  Tok.setAnnotationValue(strdup(DeadDirective.str().c_str()));
+
+  PP.EnterToken(Tok);
 }
 
 /// \brief Handle '#pragma pointers_to_members'
