@@ -355,6 +355,7 @@ Retry:
     return ParseOpenMPDeclarativeOrExecutableDirective(Allowed);
 
   case tok::annot_pragma_dead:
+    llvm::errs() << "#pragma dead" << "\n";
     abort();
 
   case tok::annot_pragma_ms_pointers_to_members:
