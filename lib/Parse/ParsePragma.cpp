@@ -248,6 +248,9 @@ void Parser::initializePragmaHandlers() {
 
   NoUnrollHintHandler.reset(new PragmaUnrollHintHandler("nounroll"));
   PP.AddPragmaHandler(NoUnrollHintHandler.get());
+
+  DeadHandler.reset(new PragmaDeadHandler());
+  PP.AddPragmaHandler(DeadHandler.get());
 }
 
 void Parser::resetPragmaHandlers() {
