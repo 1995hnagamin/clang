@@ -354,6 +354,9 @@ Retry:
     ProhibitAttributes(Attrs);
     return ParseOpenMPDeclarativeOrExecutableDirective(Allowed);
 
+  case tok::annot_pragma_dead:
+    abort();
+
   case tok::annot_pragma_ms_pointers_to_members:
     ProhibitAttributes(Attrs);
     HandlePragmaMSPointersToMembers();
