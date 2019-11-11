@@ -547,6 +547,12 @@ bool Parser::ParseTopLevelDecl(DeclGroupPtrTy &Result) {
 
   Result = DeclGroupPtrTy();
   switch (Tok.getKind()) {
+
+  case tok::annot_pragma_dead:
+    HandlePragmaDead();
+    llvm::errs() << "foobar" << "\n";
+    abort();
+
   case tok::annot_pragma_unused:
     HandlePragmaUnused();
     return false;
