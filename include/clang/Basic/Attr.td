@@ -2059,6 +2059,18 @@ def Unaligned : IgnoredAttr {
   let Spellings = [Keyword<"__unaligned">];
 }
 
+def Dead : Attr {
+  let Spellings = [Pragma<"", "dead">];
+  let Args = [StringArgument<"msg">];
+  let SemaHandler = 0;
+  let Documentation = [Undocumented];
+  let AdditionalMembers = [{
+  void printPrettyPragma(raw_ostream &OS, const PrintingPolicy &Policy) const {
+    OS << '(' << msg << ')';
+  }
+  }];
+}
+
 def LoopHint : Attr {
   /// #pragma clang loop <option> directive
   /// vectorize: vectorizes loop operations if State == Enable.
