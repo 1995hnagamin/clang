@@ -526,6 +526,8 @@ private:
   /// #pragma OPENCL EXTENSION...
   void HandlePragmaOpenCLExtension();
 
+  void HandlePragmaDead();
+
   /// \brief Handle the annotation token produced for
   /// #pragma clang __debug captured
   StmtResult HandlePragmaCaptured();

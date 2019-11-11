@@ -495,6 +495,10 @@ void Parser::HandlePragmaOpenCLExtension() {
   }
 }
 
+void Parser::HandlePragmaDead() {
+  assert(Tok.is(tok::annot_pragma_dead));
+}
+
 void Parser::HandlePragmaMSPointersToMembers() {
   assert(Tok.is(tok::annot_pragma_ms_pointers_to_members));
   LangOptions::PragmaMSPointersToMembersKind RepresentationMethod =
