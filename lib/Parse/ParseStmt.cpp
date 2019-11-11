@@ -355,6 +355,8 @@ Retry:
     return ParseOpenMPDeclarativeOrExecutableDirective(Allowed);
 
   case tok::annot_pragma_dead:
+    ProhibitAttributes(Attrs);
+    HandlePragmaDead();
     llvm::errs() << "#pragma dead" << "\n";
     abort();
 
